@@ -23,6 +23,7 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+#include <map>
 
 using namespace std;
 
@@ -35,9 +36,15 @@ class Bible {
       string infile;		// file path name
       ifstream instream;	// input stream, used when file is open
       bool isOpen;		// true if file is open
+      map<Ref, int> index;	// map for index
       // OPTIONAL: you may add variables to keep track of
       // the current line and/or reference when scanning the file
       int lineNum;
+
+      int buildBibleIndex(string filename); // build the index
+
+      // Check if a given ref is valid
+      int validateRef(Ref ref, LookupResult& status);
 
    public:
       Bible();	// Default constructor

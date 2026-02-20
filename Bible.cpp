@@ -23,19 +23,99 @@ using namespace std;
 Bible::Bible()
 {
    infile = "/home/class/csc3004/Bibles/web-complete";
+   buildBibleIndex(infile);
 }
 
 // Constructor – pass bible filename
-Bible::Bible(const string s) { infile = s; }
+Bible::Bible(const string s) { infile = s; buildBibleIndex(infile); }
+
+int Bible::buildBibleIndex(string filename) {
+   openBible();
+
+   if (!instream.is_open()) {
+      cerr << "Eror: cannot open the input file: " << filename << endl;
+      return -1;
+   }
+
+   int position = instream.tellg();
+   int referenceCount = 0;
+   string line;
+
+   while (getline(instream, line)) {
+      instream.seekg(position);
+      getline(instream, line);
+
+      Ref ref = Ref(line);
+
+      index[ref] = position;
+
+      position = instream.tellg();
+      referenceCount++;
+   }
+
+   cout << "--Diagnostic Information--" << endl;
+
+   // Display the total references added
+   cout << "Number of refernces added: " << referenceCount << endl;
+
+   // Display the byte offset of the last verse added
+   auto it = std::prev(index.end());
+   cout << "Byte offset of last verse added: " << it->second << endl;
+
+   // Display the byte offset of a few specific verses
+   Ref genesis1_1(1, 1, 1);
+   Ref genesis1_2(1, 1, 2);
+   Ref genesis1_27(1, 1, 27);
+
+   cout << "Genesis 1:1 byte offset: " << index[genesis1_1] << endl;
+   cout << "Genesis 1:2 byte offset: " << index[genesis1_2] << endl;
+   cout << "Genesis 1:27 byte offset: " << index[genesis1_27] << endl;
+   cout << endl;
+
+   closeBible();
+
+   return 1;
+}
+
+int Bible::validateRef(Ref ref, LookupResult& status) {
+   // Check the book number's validity
+   if (ref.getBook() < 1 || ref.getBook() > 66) {
+      status = NO_BOOK;
+      return 0;
+   }
+
+   // Check for verses after Revelation 22:21
+   if (ref.getBook() == 66) {
+      if (ref.getChapter() > 22) {
+         status = NO_CHAPTER;
+         return 0;
+      }
+
+      if (ref.getChapter() == 22 && ref.getVerse() > 21) {
+         status = NO_VERSE;
+         return 0;
+      }
+   }
+
+   // Determine if the refernce does not exist
+   if (index.count(ref) == 0) {
+      Ref checkChapterValidity = Ref(ref.getBook(), ref.getChapter(), 1);
+
+      if(index.count(checkChapterValidity) == 0) {
+         status = NO_CHAPTER;
+         return 0;
+      } else {
+         status = NO_VERSE;
+         return 0;
+      }
+   }
+
+   return 1;
+}
 
 // REQUIRED: lookup finds a given verse in this Bible
 Verse Bible::lookup(Ref ref, LookupResult& status) {
    // TODO: scan the file to retrieve the line that holds ref ...
-
-   // Open the Bible's file if is isn't already
-   if (!instream.is_open()) {
-      openBible();
-   }
 
    // Declare verse to be returned
    Verse aVerse;
@@ -43,91 +123,26 @@ Verse Bible::lookup(Ref ref, LookupResult& status) {
    // Declare string to hold the current line
    string verseLine;
 
-   // Booleans used for checking
-   bool requestedVerseFound = false;
-   bool fileOpened = true;
-   bool noVerseOrBook = false;
-
-   // Make sure the file actually opened
-   if (!instream.is_open()) {
-      fileOpened = false;
-      status = OTHER;
-   }
-
-   // Check the book number's validity
-   if (ref.getBook() < 1 || ref.getBook() > 66) {
-      status = NO_BOOK;
-   }
-
-   // Check for verses after Revelation 22:21
-   if (ref.getBook() == 66) {
-      if (ref.getChapter() > 22) {
-         status = NO_CHAPTER;
-      }
-
-      if (ref.getChapter() == 22 && ref.getVerse() > 21) {
-         status = NO_VERSE;
-      }
-   }
+   // Check the ref's validity
+   validateRef(ref, status);
 
    // Attempt to find the verse
-   if ((status != NO_BOOK) || (status != NO_CHAPTER) ||
-       (status != NO_VERSE) || (fileOpened == false)) {
-      lineNum = 1;
+   if ((status != NO_BOOK) && (status != NO_CHAPTER) &&
+       (status != NO_VERSE)) {
 
-      while(requestedVerseFound == false && noVerseOrBook == false &&
-            getline(instream, verseLine)) {
-         Ref lineRef = Ref(verseLine);
-         Verse succeedingVerse;
+      // Get the position
+      int requestedVersePos = index[ref];
 
-         // Make sure that the end of the Bible has not
-         // been reached before trying to get the next verse
-         if (!(lineRef.getBook() == 66 &&
-               lineRef.getChapter() == 22 &&
-               lineRef.getVerse() == 21)) {
-
-            // Save the current position in the Bible
-            streampos currPos = instream.tellg();
-
-            // Get the next verse for error checking
-            succeedingVerse = nextVerse(status);
-
-            // Return to the saved position
-            instream.seekg(currPos);
-         }
-
-         // Check to see if the current verse is the requested one
-         if (ref == lineRef) {
-            requestedVerseFound = true;
-         }
-
-         /* Determine if an invalid chapter or verse was given
-
-            This works by comparing the current verse to the next one.
-            If current verse is not the requested verse, but is in the same book
-            and chapter, and if the next verse's chapter or book number increments,
-            an invalid refernce was given. */
-
-         if (ref.getBook() == lineRef.getBook()) {
-            if ((ref.getChapter() == lineRef.getChapter()) &&
-                (succeedingVerse.getRef().getBook() > ref.getBook() ||
-                 succeedingVerse.getRef().getChapter() > ref.getChapter())) {
-               status = NO_VERSE;
-               noVerseOrBook = true;
-            } else if (succeedingVerse.getRef().getBook() > ref.getBook()) {
-               status = NO_CHAPTER;
-               noVerseOrBook = true;
-            }
-         }
-
-         lineNum++;
-      }
+      // Get the verse
+      instream.seekg(requestedVersePos);
+      getline(instream, verseLine);
+      status = SUCCESS;
    }
 
    // update the status variable
-   if (requestedVerseFound) {
+   if (status == SUCCESS) {
+
       // Verse was found
-      status = SUCCESS;
       aVerse = Verse(verseLine);
    } else {
       // create and return the verse object
