@@ -18,9 +18,18 @@ USER= elilitman
 CC= g++
 CFLAGS= -g -std=c++11
 
-all:	bibleajax.cgi PutCGI PutHTML
+#all:	bibleajax.cgi PutCGI PutHTML
+all: testreader
+
 
 # TODO: For bibleajax.cgi, add dependencies to include
+testreader.o : Ref.h Verse.h Bible.h testreader.cpp
+	$(CC) $(CFLAGS) -c testreader.cpp
+
+# Build the executable
+testreader: Ref.o Verse.o Bible.o testreader.o
+	$(CC) $(CFLAGS) -o testreader Ref.o Verse.o Bible.o testreader.o
+
 # compiled classes from Project 1 to be linked into the executable program
 bibleajax.cgi:	bibleajax.o Ref.o Verse.o Bible.o
 	$(CC) $(CFLAGS) -o bibleajax.cgi bibleajax.o -lcgicc Ref.o Verse.o Bible.o
