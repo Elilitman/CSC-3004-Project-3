@@ -29,18 +29,25 @@ Bible::Bible()
 // Constructor – pass bible filename
 Bible::Bible(const string s) { infile = s; buildBibleIndex(infile); }
 
+// Create the index
 int Bible::buildBibleIndex(string filename) {
    openBible();
 
    if (!instream.is_open()) {
       cerr << "Eror: cannot open the input file: " << filename << endl;
-      return -1;
+      return 0;
    }
 
+   // Current position in the file
    int position = instream.tellg();
+
+   // References added to the index
    int referenceCount = 0;
+
+   /// Current line
    string line;
 
+   // Add the references to the index
    while (getline(instream, line)) {
       instream.seekg(position);
       getline(instream, line);
@@ -53,6 +60,7 @@ int Bible::buildBibleIndex(string filename) {
       referenceCount++;
    }
 
+   // Display diagnostic information
    cout << "--Diagnostic Information--" << endl;
 
    // Display the total references added
