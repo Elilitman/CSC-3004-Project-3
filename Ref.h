@@ -43,16 +43,16 @@ class Ref {
       Ref(const int, const int, const int); 	// Construct from three integer
 
       // Accessors
-      int getBook();		// Access book number
+      int getBook() const;	// Access book number
       string getBookName();	// Access book name
-      int getChapter();		// Access chapter number
-      int getVerse();		// Access verse number
+      int getChapter() const;	// Access chapter number
+      int getVerse() const;	// Access verse number
 
       // REQUIRED Comparison: determine if two references are equal
       bool operator==(Ref &);
 
       // OPTIONAL: < and > comparisons for Ref objects might also be useful
-      bool operator<(Ref& ref);
+      bool operator<(const Ref& ref) const;
       bool operator>(Ref& ref);
 
       // REQUIRED: Display the reference on cout, example output: John 3:16

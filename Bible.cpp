@@ -194,7 +194,20 @@ void Bible::display() {
 // OPTIONAL access functions
 // OPTIONAL: Return the reference after the given ref
 Ref Bible::next(const Ref ref, LookupResult& status) {
-   return ref;
+   int position = index[ref];
+   string verseLine;
+
+   if (!instream.is_open()) {
+      openBible();
+   }
+
+   instream.seekg(position);
+   getline(instream, verseLine);
+   getline(instream, verseLine);
+
+   Ref nextRef = Ref(verseLine);
+
+   return nextRef;
 }
 
 // OPTIONAL: Return the reference before the given ref

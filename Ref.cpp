@@ -102,9 +102,9 @@ Ref::Ref(const int b, const int c, const int v) {
 }
 
 // Accessors
-int Ref::getBook() {return book;}	 // Access book number
-int Ref::getChapter() {return chapter;}	 // Access chapter number
-int Ref::getVerse() {return verse;};     // Access verse number
+int Ref::getBook() const {return book;}	 	// Access book number
+int Ref::getChapter() const {return chapter;}	// Access chapter number
+int Ref::getVerse() const {return verse;};	// Access verse number
 
 // Access book name
 string Ref::getBookName() {
@@ -129,8 +129,7 @@ bool Ref::operator==(Ref & ref) {
 }
 
 // OPTIONAL: define < and > comparisons
-// Unused
-bool Ref::operator<(Ref& ref) {
+bool Ref::operator<(const Ref& ref) const {
    if (book < ref.getBook()) {
       return true;
    }
@@ -177,7 +176,7 @@ void Ref::display() {
    if (noBooks) {
       cout << book << ":" << chapter << endl << verse;
    } else {
-      cout << booksOfTheBible[book - 1] << " " << chapter << "<br>" <<  verse << endl;
+      cout << booksOfTheBible[book - 1] << " " << chapter << "\n" <<  verse;
    }
 }
 
