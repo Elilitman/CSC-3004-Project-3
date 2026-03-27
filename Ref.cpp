@@ -171,16 +171,16 @@ bool Ref::operator>(Ref& ref) {
 }
 
 // Display Reference
-void Ref::display() {
+string Ref::display() {
    // TODO: modify display function to show book name instead of book number
    if (noBooks) {
-      cout << book << ":" << chapter << endl << verse;
+      return to_string(book) + ":" + to_string(chapter) + "\n" + to_string(verse);
    } else {
-      cout << booksOfTheBible[book - 1] << " " << chapter << "\n" <<  verse;
+      return booksOfTheBible[book - 1] + " " + to_string(chapter) + "\n" + to_string(verse);
    }
 }
 
 // Display reference with no book or chapter numbers/names
-void Ref::displayNoBookOrChapter() {
-   cout << verse;
+string Ref::displayNoBookOrChapter() {
+   return to_string(verse);
 }

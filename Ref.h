@@ -58,10 +58,10 @@ class Ref {
       // REQUIRED: Display the reference on cout, example output: John 3:16
       // Your version of display should show the book name
       // corresponding to the stored book number.
-      void display();
+      string display();
 
       // Display the referernce on cout without the book or chapter number/name.
-      void displayNoBookOrChapter();
+      string displayNoBookOrChapter();
 };
 
 #endif //Ref_H

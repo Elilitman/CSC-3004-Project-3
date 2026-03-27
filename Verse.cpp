@@ -40,13 +40,11 @@ Ref Verse::getRef() {
 }
 
 // display reference and verse
-void Verse::display() {
-   verseRef.display();
-   cout << " " << verseText;
+string Verse::display() {
+   return verseRef.display() + " " + verseText;
 }
 
 // Display verse number and verse text
-void Verse::displayNoBookOrChapter() {
-   verseRef.displayNoBookOrChapter();
-   cout << " " << verseText;
+string Verse::displayNoBookOrChapter() {
+   return verseRef.displayNoBookOrChapter() + " " + verseText;
 }

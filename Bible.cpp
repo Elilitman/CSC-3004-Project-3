@@ -141,7 +141,12 @@ Verse Bible::lookup(Ref ref, LookupResult& status) {
       // Get the position
       int requestedVersePos = index[ref];
 
+   if (!instream.is_open()) {
+      openBible();
+   }
+
       // Get the verse
+      instream.clear();
       instream.seekg(requestedVersePos);
       getline(instream, verseLine);
       status = SUCCESS;
@@ -152,6 +157,7 @@ Verse Bible::lookup(Ref ref, LookupResult& status) {
 
       // Verse was found
       aVerse = Verse(verseLine);
+
    } else {
       // create and return the verse object
       // default verse, to be replaced by a Verse object

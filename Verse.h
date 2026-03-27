@@ -40,11 +40,11 @@ class Verse {
       // Display Verse on cout
       // Display reference & verse [with line breaks as needed]
       // The reference should be displayed by calling verseRef.display()
-      void display();
+      string display();
 
       // Display verse number and verse text on cout
       // The verse's number is called and displayed by calling verseRef.displayNoBC()
-      void displayNoBookOrChapter();
+      string displayNoBookOrChapter();
 };
 
 #endif //Verse_H
