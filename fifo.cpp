@@ -28,10 +28,10 @@ Fifo::Fifo(string name){
   int result = mknod(pipename.c_str(),MODE | S_IFIFO, 0);
 
   if ((result == -1) && (errno != EEXIST)) {
-    cout << "Error creating pipe: " << name << endl;
+    //cout << "Error creating pipe: " << name << endl;
     return;
   }
-  cout << "Success creating pipe: " << name << endl;
+  //cout << "Success creating pipe: " << name << endl;
   fd = 0;
   return;
 
@@ -39,7 +39,7 @@ Fifo::Fifo(string name){
 
 void Fifo::openwrite() {
   if (fd !=0) {
-    cout << "Fifo already opened: " << pipename << endl;
+    //cout << "Fifo already opened: " << pipename << endl;
     return;
   }
   // Open the pipe
@@ -47,13 +47,13 @@ void Fifo::openwrite() {
 
   // Check if open succeeded
   if (fd ==-1) {
-	cout << "Error - bad input pipe: " << pipename << endl;
+	//cout << "Error - bad input pipe: " << pipename << endl;
 	return;
   }
 }
 void Fifo::openread() {
   if (fd !=0) {
-    cout << "Fifo already opened: " << pipename << endl;
+    //cout << "Fifo already opened: " << pipename << endl;
     return;
   }
   // Open the pipe
@@ -61,7 +61,7 @@ void Fifo::openread() {
 
   // Check if open succeeded
   if (fd ==-1) {
-	cout << "Error - bad input pipe: " << pipename << endl;
+	//cout << "Error - bad input pipe: " << pipename << endl;
 	return;
   }
 }
@@ -76,7 +76,7 @@ void Fifo::fifoclose() {
 // Receive a message from a FIFO (named pipe)
 string Fifo::recv() {
   if (fd ==0) {
-    cout << "Fifo not open for read: " << pipename << endl;
+    //cout << "Fifo not open for read: " << pipename << endl;
     return ("");
   }
 
@@ -98,7 +98,7 @@ string Fifo::recv() {
 
     // -1 means something isn't working
     if (bytes ==-1) {
-      cout << "Error - bad read on input pipe: " << pipename << endl;
+      //cout << "Error - bad read on input pipe: " << pipename << endl;
       return("");
     }
     // check if nothing was read
@@ -123,7 +123,7 @@ string Fifo::recv() {
 // Return 0 if fails, 1 if succeeds
 void Fifo::send(string message) {
   if (fd ==0) {
-    cout << "Fifo not open for send: " << pipename << endl;
+    //cout << "Fifo not open for send: " << pipename << endl;
     return;
   }
 
@@ -133,11 +133,11 @@ void Fifo::send(string message) {
   message = message + MESSTERM;
   bytes = write(fd, message.c_str(),message.length());
   if (bytes ==-1) {
-    cout << "Error - bad write on output pipe: " << pipename << endl;
+    //cout << "Error - bad write on output pipe: " << pipename << endl;
     return;
   }
     if (bytes == 0) {
-      cout << "Error - nothing written: " << pipename << endl;
+      //cout << "Error - nothing written: " << pipename << endl;
       return;
     }
   return;

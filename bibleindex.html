@@ -40,28 +40,23 @@
 
   <script type="text/javascript">
   var XMLHttp;
-  if(navigator.appName == "Microsoft Internet Explorer")
-  {
+  if(navigator.appName == "Microsoft Internet Explorer") {
      XMLHttp = new ActiveXObject("Microsoft.XMLHTTP");
-  } 
-  else 
-  {
+  } else {
      XMLHttp = new XMLHttpRequest();
   }
 
   // TODO: change USERNAME to your username on Linux server.
-  function getresponse ()
-  {
+  function getresponse () {
      // check that search_type is selected
      searchType = document.querySelector('input[name = "search_type"]:checked');
-     if (searchType == null)
-     {
+     if (searchType == null) {
         alert("Please select a search type!");
         return;
      }
 
      // NOTE: This page must be loaded from cs.mvnu.edu to avoid a cross-origin request violation.     
-     XMLHttp.open("GET", "/class/csc3004/elilitman/cgi-bin/bibleajax.cgi?"
+     XMLHttp.open("GET", "/class/csc3004/elilitman/cgi-bin/bibleindex.cgi?"
                   + "search_type=" + searchType.value
                   + "&translation=" + document.getElementById('translation').value
                   + "&book=" + document.getElementById('book').value
@@ -71,8 +66,7 @@
                   true); // true indicates asynchronous request
    
      // callback function
-     XMLHttp.onreadystatechange=function()
-     {
+     XMLHttp.onreadystatechange=function() {
         if (XMLHttp.readyState == XMLHttp.DONE)
            document.getElementById('response_area').innerHTML = XMLHttp.responseText;
            // DEMO: alert("readystatechange with readyState " + XMLHttp.readyState);
@@ -103,7 +97,7 @@
 <hr>
 <!-- Get user input -->
 <table>
-  <tr>
+  <!--<tr>
     <td align=right valign=top><label for="translation">Translation:</label></td>
     <td align=left valign=top>
       <select name="translation" id=translation>
@@ -114,7 +108,7 @@
         <option value="webster">Webster Translation
       </select>
     <td>
-  </tr>
+  </tr>-->
   <tr>
   <td align=right valign=top><label for="book">Book:</label></td>
   <td align=left valign=top>

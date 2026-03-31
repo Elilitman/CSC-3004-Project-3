@@ -174,9 +174,9 @@ bool Ref::operator>(Ref& ref) {
 string Ref::display() {
    // TODO: modify display function to show book name instead of book number
    if (noBooks) {
-      return to_string(book) + ":" + to_string(chapter) + "\n" + to_string(verse);
+      return to_string(book) + ":" + to_string(chapter) + "<br>" + to_string(verse);
    } else {
-      return booksOfTheBible[book - 1] + " " + to_string(chapter) + "\n" + to_string(verse);
+      return booksOfTheBible[book - 1] + " " + to_string(chapter) + "<br>" + to_string(verse);
    }
 }
 

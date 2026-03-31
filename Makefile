@@ -18,8 +18,8 @@ USER= elilitman
 CC= g++
 CFLAGS= -g -std=c++11
 
-#all:	lookupserver bibleindex.cgi PutCGI PutHTML
-all:	lookupserver
+all:	lookupserver bibleindex.cgi PutCGI PutHTML
+#all:	lookupserver
 
 # Build the lookupserver executable
 lookupserver: lookupserver.o Bible.o Ref.o Verse.o fifo.o
