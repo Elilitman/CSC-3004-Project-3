@@ -36,10 +36,12 @@
 using namespace std;
 using namespace cgicc;
 
+// Set up logging
 #define logging
    #define LOG_FILENAME "/home/class/csc3004/tmp/elilitman-bibleindex.log"
 #include "logfile.h"
 
+// Name pipes
 string send_pipe = "BibleRequest";
 string receive_pipe = "BibleReply";
 
@@ -144,6 +146,7 @@ int main() {
 
       string returnedMessage = "";
 
+      // Display the results
       while (returnedMessage != "$end") {
          returnedMessage = recfifo.recv();
 
@@ -154,6 +157,7 @@ int main() {
          log("Received: " + returnedMessage);
       }
 
+      // Close the pipes
       recfifo.fifoclose();
       log("Closed recfifo");
 
