@@ -56,17 +56,25 @@ int main () {
    sendfifo.openwrite();
 
    while (true) {
+      result = SUCCESS;
       string verseRequest = recfifo.recv();
       cout << "Received request: " << verseRequest << endl;
 
       int inputParameters[4];
 
-      for (int i = 0; i < 3; i++) {
-         inputParameters[i] = stoi(verseRequest.substr(0, verseRequest.find("|")));
-         verseRequest = verseRequest.substr(verseRequest.find("|") + 1);
-      }
+      try {
+         for (int i = 0; i < 3; i++) {
+            inputParameters[i] = stoi(verseRequest.substr(0, verseRequest.find("|")));
+            verseRequest = verseRequest.substr(verseRequest.find("|") + 1);
+         }
 
-      inputParameters[3] = stoi(verseRequest);
+         inputParameters[3] = stoi(verseRequest);
+      } catch (exception e) {
+         inputParameters[0] = 1;
+         inputParameters[1] = 1;
+         inputParameters[2] = 1;
+         inputParameters[3] = 1;
+      }
 
       bookNum = inputParameters[0];
       chapterNum = inputParameters[1];
