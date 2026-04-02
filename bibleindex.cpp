@@ -62,9 +62,6 @@ int main() {
    Fifo recfifo(receive_pipe);
    Fifo sendfifo(send_pipe);
 
-   //recfifo.openread();
-   //sendfifo.openwrite();
-
    // GET THE INPUT DATA
    // browser sends us a string of field name/value pairs from HTML form
    // retrieve the value for each appropriate field name
